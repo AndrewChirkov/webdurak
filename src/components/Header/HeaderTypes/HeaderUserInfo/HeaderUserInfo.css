@@ -1,0 +1,12 @@
+.user-info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0px 15px;
+}
+
+.user-info-name {
+  margin-bottom: 5px;
+}

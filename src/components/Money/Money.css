@@ -1,0 +1,19 @@
+.money-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+}
+
+.money-icon {
+  width: 30px;
+  height: 20px;
+  background-image: url("./Money.icon.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.money-count {
+  font-weight: 600;
+}

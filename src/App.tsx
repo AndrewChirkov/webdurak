@@ -1,26 +1,22 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { Loader } from "./components/Loader/Loader";
+import { PathsRouter } from "./components/Routers/PathsRouter/PathsRouter";
+import { app } from "./store/app.state";
 
-function App() {
+export const App = observer(() => {
+  useEffect(() => {
+    app.connectWs(app.authKey)
+  }, [])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {app.loading ?
+        <Loader status={app.loading} /> :
+        <PathsRouter />
+      }
     </div>
   );
-}
+})
 
 export default App;

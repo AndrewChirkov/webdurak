@@ -1,0 +1,51 @@
+:root {
+  --main-back-color: #EDF7FF;
+  --ui-blue-color: #004C97;
+  --ui-blue-hover: #005bb6;
+  --ui-green-color: #17ab6d;
+  --ui-green-hover: #169c64;
+  --ui-yellow-color: #FFCD00;
+  --ui-yellow-hover: #d8ad01;
+  --ui-red-color: #C8102E;
+  --ui-red-hover: #e11134;
+  --light-shadow-down: 0px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  background-color: var(--main-back-color);
+}
+
+input {
+  border: none;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+}
+
+button {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.pad-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
