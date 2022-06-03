@@ -1,20 +1,19 @@
-import { action, makeObservable } from "mobx";
+import { makeAutoObservable } from "mobx";
 import { Api } from "../http/api";
 import { LoginUserData, RegisterUserData } from "../types/auth.types";
 import { app } from "./app.state";
-import { Status } from "../types/global.types";
+import { notify } from "./notify.state";
+import { NotifyType } from "../types/notify.types";
 
 class AuthState {
-  status: Status = null
+  loading: boolean
 
   constructor() {
-    makeObservable(this, {
-      register: action.bound
-    })
+    makeAutoObservable(this)
   }
 
   async register(registerUserData: RegisterUserData) {
-    this.status = Status.Pending
+    this.loading = true
 
     try {
       const response = await Api.register(registerUserData)
@@ -23,16 +22,16 @@ class AuthState {
       app.setAuthorization(data.authKey)
       app.connectWs(data.authKey)
 
-      this.status = Status.Done
+      this.loading = false
     }
-    catch(error) {
-      console.error(error)
-      this.status = Status.Error
+    catch(error: any) {
+      notify.make(error.code, error.response.data.message || error.message, NotifyType.Warning)
+      this.loading = false
     }
   }
 
   async login(loginUserData: LoginUserData) {
-    this.status = Status.Pending
+    this.loading = true
 
     try {
       const response = await Api.login(loginUserData)
@@ -41,17 +40,16 @@ class AuthState {
       app.setAuthorization(data.authKey)
       app.connectWs(data.authKey)
 
-      this.status = Status.Done
+      this.loading = false
     }
-    catch(error) {
-      console.error(error)
-      this.status = Status.Error
+    catch(error: any) {
+      notify.make(error.code, error.response.data.message || error.message, NotifyType.Warning)
+      this.loading = false
     }
   }
 
-  async exit() {
+  exit() {
     app.unsetAuthorization()
-    app.connectWs(null)
   }
 }
 

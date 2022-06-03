@@ -8,12 +8,12 @@ import { user } from "../../store/user.state"
 export const GameMain = observer(() => {
 
   useEffect(() => {
-    user.updateUserData()
+    user.getUserData()
   }, [])
 
   return (
     <>
-      <Loader status={user.status} />
+      <Loader loading={user.loading} />
       <div className="container">
         <HeaderUserInfo />
         <div className="pad-container">

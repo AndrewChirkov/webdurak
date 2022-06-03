@@ -1,13 +1,9 @@
 import axios from "axios";
 import { API_URL } from "../constants";
-import { app } from "../store/app.state";
 import { AuthKey, LoginUserData, RegisterUserData } from "../types/auth.types";
 
 const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Authorization': `Bearer ${app.authKey}`
-  }
+  baseURL: API_URL
 })
 
 export class Api {

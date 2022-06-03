@@ -1,12 +1,14 @@
-import { makeAutoObservable, runInAction } from "mobx"
+import { makeAutoObservable } from "mobx"
 import { io, Socket } from "socket.io-client"
 import { WS_URL } from "../constants"
-import { Status } from "../types/global.types"
+import { Commands } from "../types/commands.types"
+import { NotifyType } from "../types/notify.types"
+import { notify } from "./notify.state"
+import { user } from "./user.state"
 
 class AppState {
   authKey: string = localStorage.getItem('authKey')
   isAuth: boolean = this.authKey ? true : false
-  status: Status
   loading: boolean = true
   client: Socket
 
@@ -15,7 +17,6 @@ class AppState {
   }
 
   connectWs(authKey: string | null) {
-    this.startLoading()
     this.client = io(WS_URL, {
       auth: {
         authKey: authKey
@@ -24,13 +25,37 @@ class AppState {
     })
   
     this.client.on("connect", () => {
+      this.verifyAuth(authKey)
       this.endLoading()
+
       console.log("connected, id = ", this.client.id)
+    })
+
+    this.client.on("exception", (error: any) => {
+      this.connectWs(null)
+      notify.make(error.status, error.message, NotifyType.Warning, 3000)
+      setTimeout(() => {
+        this.goToMainPage()
+      }, 3000)
     })
   
     this.client.on("disconnect", () => {
       console.log("disconnected");
     })
+  }
+
+  verifyAuth(authKey: string) {
+    if (authKey) {
+      this.client.emit(Commands.VerifyAuth, (response: string) => {
+        if (response !== authKey) {
+          this.goToMainPage()
+        }
+
+        if (response === authKey) {
+          user.loopOfUpdate()
+        }
+      })
+    }
   }
 
   setAuthorization(authkey: string) {
@@ -45,7 +70,6 @@ class AppState {
     localStorage.removeItem('authKey')
   }
 
-
   startLoading() {
     this.loading = true
   }
@@ -56,6 +80,10 @@ class AppState {
 
   toggleLoading() {
     this.loading = !this.loading
+  }
+
+  goToMainPage() {
+    window.location.href = "/"
   }
 }
 

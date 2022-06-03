@@ -1,49 +1,50 @@
-import { ChangeEvent, useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useNavigate } from "react-router"
 import { Header } from "../../components/Header/Header"
 import { HeaderType } from "../../components/Header/Header.types"
 import { Button } from "../../components/UI/Button/Buttons"
 import { Input } from "../../components/UI/Input/Input"
 import { auth } from "../../store/auth.state"
-import { Status } from "../../types/global.types"
-import { RegisterUserData } from "../../types/auth.types"
 import "./Register.css"
+import { useFormik } from "formik"
+import * as Yup from 'yup'
+import { RegisterUserData } from "../../types/auth.types"
+import { app } from "../../store/app.state"
+
+const RegisterSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, "Никнейм должен быть больше 3 символов")
+    .max(20, "Никнейм не должен быть больше 20 символов")
+    .required("Никнейм - обязательно поле"),
+
+  email: Yup.string()
+    .email("Введите корректную почту")
+    .required("Email - обязательно поле"),
+
+  password: Yup.string()
+    .min(6, "Пароль должен быть больше 6 символов")
+    .required("Пароль - обязательно поле")
+})
 
 export const Register = () => {
-  const [registerUserData, setRegisterUserData] = useState<RegisterUserData>({ 
-    name: "",
-    email: "",
-    password: ""
-  })
   const navigate = useNavigate()
-
-  const navigateToGame = () => {
-    navigate("/game/durak")
-  }
-
-  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    setRegisterUserData((prevState) => ({ ...prevState, name: e.target.value }))
-  }
-
-  const handleChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
-    setRegisterUserData((prevState) => ({ ...prevState, email: e.target.value }))
-  }
-
-  const handleChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setRegisterUserData((prevState) => ({ ...prevState, password: e.target.value }))
-  }
-
-  const sendRegisterForm = () => {
-    auth.register(registerUserData)
-  }
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+    validationSchema: RegisterSchema,
+    onSubmit: (values: RegisterUserData) => {
+      auth.register(values)
+    },
+    validateOnBlur: false,
+    validateOnChange: false
+  })
 
   useEffect(() => {
-    auth.exit()
-  }, [])
-
-  useEffect(() => {
-    if (auth.status === Status.Done) {
-      navigateToGame()
+    if (app.isAuth) {
+      navigate("/game/durak")
     }
   })
 
@@ -52,10 +53,35 @@ export const Register = () => {
       <Header type={HeaderType.RegisterInfo} />
       <div className="pad-container">
         <div className="input-group">
-          <Input onChange={handleChangeName} name="register-name" type="text" placeholder={"Введите никнейм"} value={registerUserData.name} />
-          <Input onChange={handleChangeEmail} name="register-email" type="email" placeholder={"Введите email"} value={registerUserData.email} />
-          <Input onChange={handleChangePassword} name="register-password" type="password" placeholder={"Введите пароль"} value={registerUserData.password} />
-          <Button onClick={sendRegisterForm} text={auth.status === Status.Pending ? "Загружаемся..." : "Зарегистрироваться"} disabled={auth.status === Status.Pending ? true : false} />
+        <form className="input-group" onSubmit={formik.handleSubmit}>
+          <Input
+            name="name"
+            placeholder={"Введите имя"}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            error={formik.errors.name}
+          />
+          <Input
+            name="email"
+            type="email"
+            placeholder={"Введите email"}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.errors.email}
+          />
+          <Input
+            name="password"
+            type="password"
+            placeholder={"Введите пароль"}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.errors.password}
+          />
+          <Button
+            type="submit"
+            text={auth.loading ? "Загружаемся..." : "Зарегистрироваться"}
+          />
+        </form>
         </div>
       </div>
     </div>

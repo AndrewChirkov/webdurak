@@ -1,5 +1,1 @@
-export const enum Status {
-  Pending = "pending",
-  Done = "done",
-  Error = "error"
-}
+export type Global = any

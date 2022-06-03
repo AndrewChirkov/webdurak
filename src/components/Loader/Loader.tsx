@@ -1,18 +1,17 @@
-import { Status } from "../../types/global.types"
 import "./Loader.css"
 
 interface LoaderProps {
-  status: Status | boolean
+  loading: boolean
 }
 
 export const Loader = (props: LoaderProps) => {
   let statusClass = ""
 
-  if (props.status === Status.Pending || props.status === true) {
+  if (props.loading) {
     statusClass = "active"
   }
 
-  if (props.status === Status.Done || props.status === false) {
+  if (!props.loading) {
     statusClass = ""
   }
 
