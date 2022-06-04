@@ -1,7 +1,7 @@
-import { observer } from "mobx-react-lite"
-import { user } from "../../../../store/user.state"
-import { Money } from "../../../Money/Money"
-import "./HeaderUserInfo.css"
+import { observer } from "mobx-react-lite";
+import { user } from "../../../../store/user.state";
+import { Money } from "../../../Money/Money";
+import "./HeaderUserInfo.css";
 
 export const HeaderUserInfo = observer(() => {
   return (
@@ -13,5 +13,5 @@ export const HeaderUserInfo = observer(() => {
         </div>
       </div>
     </div>
-  )
-})
+  );
+});

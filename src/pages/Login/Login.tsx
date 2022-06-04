@@ -1,15 +1,16 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router"
-import { Header } from "../../components/Header/Header"
-import { HeaderType } from "../../components/Header/Header.types"
-import { Button } from "../../components/UI/Button/Buttons"
-import { Input } from "../../components/UI/Input/Input"
-import { auth } from "../../store/auth.state"
-import { LoginUserData } from "../../types/auth.types"
-import "./Login.css"
-import { useFormik } from "formik"
-import * as Yup from 'yup'
-import { app } from "../../store/app.state"
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Header } from "../../components/Header/Header";
+import { HeaderType } from "../../components/Header/Header.types";
+import { Button } from "../../components/UI/Button/Buttons";
+import { Input } from "../../components/UI/Input/Input";
+import { auth } from "../../store/auth.state";
+import { LoginUserData } from "../../types/auth.types";
+import "./Login.css";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { app } from "../../store/app.state";
+import { Container } from "../../components/Container/Container";
 
 const LoginSchema = Yup.object().shape({
   name: Yup.string()
@@ -19,11 +20,11 @@ const LoginSchema = Yup.object().shape({
 
   password: Yup.string()
     .min(6, "Пароль должен быть больше 6 символов")
-    .required("Пароль - обязательно поле")
-})
+    .required("Пароль - обязательно поле"),
+});
 
 export const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -31,22 +32,22 @@ export const Login = () => {
     },
     validationSchema: LoginSchema,
     onSubmit: (values: LoginUserData) => {
-      auth.login(values)
+      auth.login(values);
     },
     validateOnBlur: false,
-    validateOnChange: false
-  })
+    validateOnChange: false,
+  });
 
   useEffect(() => {
     if (app.isAuth) {
-      navigate("/game/durak")
+      navigate("/game/durak");
     }
-  })
+  });
 
   return (
-    <div className="container">
+    <Container className="container">
       <Header type={HeaderType.LoginInfo} />
-      <div className="pad-container">
+      <Container className="pad-container">
         <form className="input-group" onSubmit={formik.handleSubmit}>
           <Input
             name="name"
@@ -63,12 +64,9 @@ export const Login = () => {
             onChange={formik.handleChange}
             error={formik.errors.password}
           />
-          <Button
-            type="submit"
-            text={auth.loading ? "Загружаемся..." : "Войти"}
-          />
+          <Button type="submit" text={auth.loading ? "Загружаемся..." : "Войти"} />
         </form>
-      </div>
-    </div>
-  )
-}
+      </Container>
+    </Container>
+  );
+};

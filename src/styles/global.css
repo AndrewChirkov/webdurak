@@ -1,13 +1,14 @@
 :root {
-  --main-back-color: #EDF7FF;
-  --ui-blue-color: #004C97;
+  --main-back-color: #edf7ff;
+  --ui-blue-color: #004c97;
   --ui-blue-hover: #005bb6;
   --ui-green-color: #17ab6d;
   --ui-green-hover: #169c64;
-  --ui-yellow-color: #FFCD00;
+  --ui-yellow-color: #ffcd00;
   --ui-yellow-hover: #d8ad01;
-  --ui-red-color: #C8102E;
+  --ui-red-color: #c8102e;
   --ui-red-hover: #e11134;
+  --ui-black-color: #2e2e2e;
   --light-shadow-down: 0px 1px 1px rgba(0, 0, 0, 0.1);
 }
 
@@ -16,36 +17,24 @@
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
 }
 
-html, body {
-  font-family: 'Rubik', sans-serif;
+html,
+body {
+  font-family: "Rubik", sans-serif;
   font-weight: 400;
   background-color: var(--main-back-color);
+  overflow-x: hidden;
 }
 
 input {
   border: none;
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 400;
 }
 
 button {
-  font-family: 'Rubik', sans-serif;
+  font-family: "Rubik", sans-serif;
   font-weight: 400;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
-
-.pad-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 10px;
 }

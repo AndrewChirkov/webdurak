@@ -1,25 +1,25 @@
-import { observer } from "mobx-react-lite"
-import { useEffect } from "react"
-import { HeaderUserInfo } from "../../components/Header/HeaderTypes/HeaderUserInfo/HeaderUserInfo"
-import { Loader } from "../../components/Loader/Loader"
-import { durak } from "../../store/durak.state"
-import { user } from "../../store/user.state"
+import { observer } from "mobx-react-lite";
+import { useEffect } from "react";
+import { Outlet } from "react-router";
+import { Container } from "../../components/Container/Container";
+import { HeaderUserInfo } from "../../components/Header/HeaderTypes/HeaderUserInfo/HeaderUserInfo";
+import { Loader } from "../../components/Loader/Loader";
+import { NavbarMenu } from "../../components/Navbar/NavbarMenu/NavbarMenu";
+import { user } from "../../store/user.state";
 
 export const GameMain = observer(() => {
-
   useEffect(() => {
-    user.getUserData()
-  }, [])
+    user.getUserData();
+  }, []);
 
   return (
     <>
       <Loader loading={user.loading} />
-      <div className="container">
+      <Container className="container">
         <HeaderUserInfo />
-        <div className="pad-container">
-          <button onClick={durak.getUsersList}>fetch users</button>
-        </div>
-      </div>
+        <Outlet />
+        <NavbarMenu />
+      </Container>
     </>
-  )
-})
+  );
+});
